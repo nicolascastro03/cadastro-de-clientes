@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["dom", "es6"],
+      "jsx": "react",
+      "strict": true,
+      "moduleResolution": "node",
+      "baseUrl": "src",
+      "paths": {
+        "*": ["src/*"]
+      },
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src"]
+  }
+  
