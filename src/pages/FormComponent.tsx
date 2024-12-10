@@ -47,17 +47,19 @@ const FormComponent: React.FC = () => {
   return (
     <Box sx={{ height: '100vh' , display: 'flex' , flexDirection: 'column' }}>
     
-      <Box
+    <Box
         sx={{
-          height: '15%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#257CFF',
-      }}
-    >
-       
-    </Box>
+          width: "100%",
+          backgroundColor: "#257CFF",
+          padding: 2,
+          color: "white",
+        }}
+      >
+        <Typography variant="h6" align="center">
+          EDIL SYSTEM
+        </Typography>
+      </Box>
+
 
       <Box
       sx={{
@@ -71,7 +73,7 @@ const FormComponent: React.FC = () => {
     
       <Box
         sx={{
-          marginTop: '-250px',
+          marginTop: '10px',
           width: 600,
           padding: 4,
           backgroundColor: '#fff',
@@ -79,8 +81,8 @@ const FormComponent: React.FC = () => {
           boxShadow: 3,
       }}
       >
-        <Typography variant="h5" sx={{ color: '#f4f'}}>
-        Formulário de Cadastro
+        <Typography variant="h5" sx={{ color: '#257CFF'}}>
+        CADASTRAR NOVO CLIENTE
       </Typography>
       
       <Box
