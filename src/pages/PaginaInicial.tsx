@@ -15,7 +15,6 @@ const PaginaInicial: React.FC = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
-      {/* Header */}
       <Box
         sx={{
           width: "100%",
@@ -29,7 +28,7 @@ const PaginaInicial: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Box branco principal */}
+      
       <Box
         sx={{
           width: "100%",
@@ -47,13 +46,13 @@ const PaginaInicial: React.FC = () => {
           Bem-vindo, <span style={{ color: "#257cff" }}>USUÁRIO</span>
         </Typography>
 
-        {/* Card "Clientes Cadastrados" Centralizado */}
+        
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center", // Centraliza horizontalmente
-            alignItems: "center", // Centraliza verticalmente
-            height: "150px", // Espaço específico reservado para centralização
+            justifyContent: "center", 
+            alignItems: "center", 
+            height: "150px", 
           }}
         >
           <Box
@@ -65,7 +64,7 @@ const PaginaInicial: React.FC = () => {
               textAlign: "center",
             }}
           >
-            {/* Cabeçalho cinza */}
+            
             <Box
               sx={{
                 backgroundColor: "#757575",
@@ -83,7 +82,7 @@ const PaginaInicial: React.FC = () => {
               </Typography>
             </Box>
 
-            {/* Valor */}
+           
             <Box
               sx={{
                 backgroundColor: "#fff",
@@ -103,7 +102,7 @@ const PaginaInicial: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Botão "Cadastrar Novo Cliente" */}
+        
         <Box
           sx={{
             display: "flex",
