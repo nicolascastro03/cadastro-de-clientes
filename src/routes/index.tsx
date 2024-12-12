@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import FormComponent from '../pages/FormComponent';
+import FormComponent from '../pages/Cadastrar';
 import PaginaInicial from '../pages/PaginaInicial';
 import ListaCadastros from '../pages/ListaCadastros';
 

@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { cpfValido } from '../components/ValidaCpf';
 
-interface FormData {
+interface DadosCliente {
   name: string;
   email: string;
-  password: string;
+  dataNascimento: string;
   cpf: string;
+  telefone: string;
 }
 
-const FormComponent: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+const Cadastrar: React.FC = () => {
+  const [dadosCliente, setDadosCliente] = useState<DadosCliente>({
     name: '',
     email: '',
-    password: '',
+    dataNascimento: '',
     cpf:'',
+    telefone: '',
   });
 
   const[cpfError, setCpfError] = useState<string | null>(null);
@@ -22,8 +24,8 @@ const FormComponent: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setDadosCliente({
+      ...dadosCliente,
       [name]: value,
     });
   };
@@ -31,12 +33,12 @@ const FormComponent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if(!cpfValido(formData.cpf)){
+    if(!cpfValido(dadosCliente.cpf)){
       setCpfError('CPF Inválido');
       return;
     }
     setCpfError(null);
-    console.log('Dados enviados:', formData);
+    console.log('Dados enviados:', dadosCliente);
     setSuccessAlert(true);
   };
 
@@ -45,10 +47,20 @@ const FormComponent: React.FC = () => {
   }
 
   return (
-    <Box sx={{ height: '100vh' , display: 'flex' , flexDirection: 'column' }}>
-    
     <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "50vh",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Box
         sx={{
+          position: "fixed",
+          top: 0,
           width: "100%",
           backgroundColor: "#257CFF",
           padding: 2,
@@ -60,30 +72,22 @@ const FormComponent: React.FC = () => {
         </Typography>
       </Box>
 
-
-      <Box
-      sx={{
-       flex: 1,
-       display: 'flex',
-       justifyContent: 'center',
-       alignItems: 'center',
-       backgroundColor: '#f5f5f5',
-        }}
-     >
-    
       <Box
         sx={{
-          marginTop: '10px',
-          width: 600,
-          padding: 4,
-          backgroundColor: '#fff',
-          borderRadius: 2,
+          width: "100%",
+          maxWidth: "900px",
+          backgroundColor: "#fff",
+          borderRadius: "8px",
           boxShadow: 3,
-      }}
+          padding: 4,
+          mt: 10,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        <Typography variant="h5" sx={{ color: '#257CFF'}}>
-        CADASTRAR NOVO CLIENTE
-      </Typography>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+          Cadastrar novo cliente
+        </Typography>
       
       <Box
         component="form"
@@ -100,7 +104,7 @@ const FormComponent: React.FC = () => {
         label="Nome"
         variant="outlined"
         name="name"
-        value={formData.name}
+        value={dadosCliente.name}
         onChange={handleChange}
         required
         fullWidth
@@ -110,7 +114,7 @@ const FormComponent: React.FC = () => {
         label="CPF"
         variant="outlined"
         name="cpf"
-        value={formData.cpf}
+        value={dadosCliente.cpf}
         onChange={handleChange}
         required
         fullWidth
@@ -123,29 +127,38 @@ const FormComponent: React.FC = () => {
         variant="outlined"
         name="email"
         type="email"
-        value={formData.email}
+        value={dadosCliente.email}
         onChange={handleChange}
         required
         fullWidth
       />
 
       <TextField
-        label="Senha"
+        label="Data de nascimento"
         variant="outlined"
-        name="password"
-        type="password"
-        value={formData.password}
+        name="Data de nascimento"
+        type="date"
+        value={dadosCliente.dataNascimento}
         onChange={handleChange}
-        required
+        fullWidth
+      />
+
+      <TextField
+        label="Telefone"
+        variant="outlined"
+        name="=telefone"
+        type="string"
+        value={dadosCliente.telefone}
+        onChange={handleChange}
         fullWidth
       />
 
       <Button type="submit" variant="contained" color="primary" fullWidth>
-        Enviar
+        Cadastrar
       </Button>
       </Box>
     </Box>
-  </Box>
+  
       <Snackbar
         open={successAlert}
         autoHideDuration={6000}
@@ -159,4 +172,4 @@ const FormComponent: React.FC = () => {
   );
 };
 
-export default FormComponent;
+export default Cadastrar;
