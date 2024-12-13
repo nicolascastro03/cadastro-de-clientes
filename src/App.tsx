@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from "react-router-dom";
-import FormComponent from './pages/Cadastrar';
+import Cadastrar from './pages/Cadastrar';
 import { AppRoutes } from './routes';
 import { ThemeProvider } from '@mui/material';
 import theme from './styles/theme';

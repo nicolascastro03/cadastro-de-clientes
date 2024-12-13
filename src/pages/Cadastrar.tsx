@@ -1,47 +1,60 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { cpfValido } from '../components/ValidaCpf';
-
-interface DadosCliente {
-  name: string;
-  email: string;
-  dataNascimento: string;
-  cpf: string;
-  telefone: string;
-}
+import { DadosCliente } from '../types/DadosClienteType';
+import { useLocation } from 'react-router-dom';
 
 const Cadastrar: React.FC = () => {
+  const location = useLocation();
+  const clienteParaEditar = location.state as DadosCliente;
+  
   const [dadosCliente, setDadosCliente] = useState<DadosCliente>({
+    id: 0,
     name: '',
     email: '',
     dataNascimento: '',
-    cpf:'',
+    cpf: '',
     telefone: '',
   });
 
-  const[cpfError, setCpfError] = useState<string | null>(null);
+  const [cpfError, setCpfError] = useState<string | null>(null);
   const [successAlert, setSuccessAlert] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setDadosCliente({
-      ...dadosCliente,
-      [name]: value,
-    });
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if(!cpfValido(dadosCliente.cpf)){
+    if (!cpfValido(dadosCliente.cpf)) {
       setCpfError('CPF Inválido');
       return;
     }
     setCpfError(null);
-    console.log('Dados enviados:', dadosCliente);
+    const storedData = localStorage.getItem("clientes");
+    const clientes: DadosCliente[] = storedData ? JSON.parse(storedData) : [];
+  
+    if (dadosCliente.id) {
+      const clientesAtualizados = clientes.map((c) =>
+        c.id === dadosCliente.id ? dadosCliente : c
+      );
+      localStorage.setItem("clientes", JSON.stringify(clientesAtualizados));
+    } else {
+  
+      const novoId = clientes.length > 0 ? Math.max(...clientes.map((c) => c.id)) + 1 : 1;
+      const clienteComId = { ...dadosCliente, id: novoId };
+      const novosClientes = [...clientes, clienteComId];
+      localStorage.setItem("clientes", JSON.stringify(novosClientes));
+    }
+  
     setSuccessAlert(true);
+  
+    setDadosCliente({
+      id: 0,
+      name: '',
+      email: '',
+      dataNascimento: '',
+      cpf: '',
+      telefone: '',
+    });
   };
-
   const handleCloseAlert = () => {
     setSuccessAlert(false);
   }
@@ -88,83 +101,96 @@ const Cadastrar: React.FC = () => {
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
           Cadastrar novo cliente
         </Typography>
-      
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
-      >
-     
 
-      <TextField
-        label="Nome"
-        variant="outlined"
-        name="name"
-        value={dadosCliente.name}
-        onChange={handleChange}
-        required
-        fullWidth
-      />
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
 
-      <TextField
-        label="CPF"
-        variant="outlined"
-        name="cpf"
-        value={dadosCliente.cpf}
-        onChange={handleChange}
-        required
-        fullWidth
-        error={!!cpfError}
-        helperText={cpfError}
-      />
+          <TextField
+            label="Nome"
+            variant="outlined"
+            name="name"
+            value={dadosCliente.name}
+            onChange={(e) => {
+              setDadosCliente({ ...dadosCliente, name: e.target.value })
+            }}
+            required
+            fullWidth
+          />
 
-      <TextField
-        label="Email"
-        variant="outlined"
-        name="email"
-        type="email"
-        value={dadosCliente.email}
-        onChange={handleChange}
-        required
-        fullWidth
-      />
+          <TextField
+            label="CPF"
+            variant="outlined"
+            name="cpf"
+            value={dadosCliente.cpf}
+            onChange={(e) => {
+              setDadosCliente({ ...dadosCliente, cpf: e.target.value })
+            }}
+            required
+            fullWidth
+            error={!!cpfError}
+            helperText={cpfError}
+          />
 
-      <TextField
-        label="Data de nascimento"
-        variant="outlined"
-        name="Data de nascimento"
-        type="date"
-        value={dadosCliente.dataNascimento}
-        onChange={handleChange}
-        fullWidth
-      />
+          <TextField
+            label="Email"
+            variant="outlined"
+            name="email"
+            type="email"
+            value={dadosCliente.email}
+            onChange={(e) => {
+              setDadosCliente({ ...dadosCliente, email: e.target.value })
+            }}
+            required
+            fullWidth
+          />
+       
+          <TextField
+            label="Data de nascimento"
+            variant="outlined"
+            name="dataNascimento"
+            value={dadosCliente.dataNascimento}
+            onChange={(e) => setDadosCliente({ ...dadosCliente, dataNascimento: e.target.value })}
+            fullWidth
+            type="date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
 
-      <TextField
-        label="Telefone"
-        variant="outlined"
-        name="=telefone"
-        type="string"
-        value={dadosCliente.telefone}
-        onChange={handleChange}
-        fullWidth
-      />
 
-      <Button type="submit" variant="contained" color="primary" fullWidth>
-        Cadastrar
-      </Button>
+
+          <TextField
+            label="Telefone"
+            variant="outlined"
+            name="telefone"
+            type="string"
+            value={dadosCliente.telefone}
+            onChange={(e) => {
+              setDadosCliente({ ...dadosCliente, telefone: e.target.value })
+            }}
+            fullWidth
+          />
+
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Cadastrar
+          </Button>
+        </Box>
       </Box>
-    </Box>
-  
+
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={successAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
       >
-        <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%'}}>
+        <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
           Dados enviados com sucesso!
         </Alert>
       </Snackbar>

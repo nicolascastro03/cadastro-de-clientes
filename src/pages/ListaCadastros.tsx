@@ -1,22 +1,39 @@
-import React, { useState } from "react";
-import { Box, TextField, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { DadosCliente } from "../types/DadosClienteType";
+import { useNavigate } from "react-router-dom";
 
 const ListaCad: React.FC = () => {
-  const [clientes, setClientes] = useState([
-    { id: 1, nome: "João Silva", email: "joao@gmail.com" },
-    { id: 2, nome: "Maria Oliveira", email: "maria@gmail.com" },
-    { id: 3, nome: "Carlos Souza", email: "carlos@gmail.com" },
-  ]);
+  const navigate = useNavigate();
+  const [clientes, setClientes] = useState<DadosCliente[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const handleEdit = (id: number) => {
-    alert(`Editar cliente com ID: ${id}`);
+  const buscarListaClientes = () => {
+    const storedData = localStorage.getItem("clientes");
+    if (storedData) {
+      setClientes(JSON.parse(storedData));
+    }
+  };
+
+  useEffect(() => {
+    buscarListaClientes();
+  }, []);
+
+  const handleEdit = (cliente: DadosCliente) => {
+    navigate('/cadastrar', { state: cliente });
   };
 
   const handleDelete = (id: number) => {
-    setClientes(clientes.filter((cliente) => cliente.id !== id));
+    const updatedClientes = clientes.filter((cliente) => cliente.id !== id);
+    setClientes(updatedClientes);
+    localStorage.setItem("clientes", JSON.stringify(updatedClientes));
   };
+
+  const filteredClientes = clientes.filter(cliente =>
+    cliente.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Box
@@ -66,24 +83,32 @@ const ListaCad: React.FC = () => {
           variant="outlined"
           fullWidth
           sx={{ mb: 2 }}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} 
         />
 
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell><strong>Nome</strong></TableCell>
-                <TableCell><strong>Email</strong></TableCell>
-                <TableCell align="right"><strong>Ações</strong></TableCell>
+                <TableCell>
+                  <strong>Nome</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Email</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Ações</strong>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {clientes.map((cliente) => (
+              {filteredClientes.map((cliente) => (
                 <TableRow key={cliente.id}>
-                  <TableCell>{cliente.nome}</TableCell>
+                  <TableCell>{cliente.name}</TableCell>
                   <TableCell>{cliente.email}</TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => handleEdit(cliente.id)} color="primary">
+                    <IconButton onClick={() => handleEdit(cliente)} color="primary">
                       <EditIcon />
                     </IconButton>
                     <IconButton onClick={() => handleDelete(cliente.id)} color="error">

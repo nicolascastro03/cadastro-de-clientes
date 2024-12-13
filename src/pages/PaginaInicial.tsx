@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PaginaInicial: React.FC = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  const [numClientes, setNumClientes] = useState<number>(0);
+  
+  const contarClientes = () => {
+    const storedData = localStorage.getItem("clientes");
+    if (storedData) {
+      const clientes = JSON.parse(storedData);
+      setNumClientes(clientes.length);
+    }
+  };
+
+  useEffect(() => {
+    contarClientes();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -28,7 +43,6 @@ const PaginaInicial: React.FC = () => {
         </Typography>
       </Box>
 
-      
       <Box
         sx={{
           width: "100%",
@@ -46,13 +60,12 @@ const PaginaInicial: React.FC = () => {
           Bem-vindo, <span style={{ color: "#257cff" }}>USUÁRIO</span>
         </Typography>
 
-        
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center", 
-            alignItems: "center", 
-            height: "150px", 
+            justifyContent: "center",
+            alignItems: "center",
+            height: "150px",
           }}
         >
           <Box
@@ -64,7 +77,6 @@ const PaginaInicial: React.FC = () => {
               textAlign: "center",
             }}
           >
-            
             <Box
               sx={{
                 backgroundColor: "#757575",
@@ -82,7 +94,6 @@ const PaginaInicial: React.FC = () => {
               </Typography>
             </Box>
 
-           
             <Box
               sx={{
                 backgroundColor: "#fff",
@@ -92,17 +103,16 @@ const PaginaInicial: React.FC = () => {
               <Typography
                 variant="h4"
                 sx={{
-                  color: "#4caf50", // Verde
+                  color: "#4caf50",
                   fontWeight: "bold",
                 }}
               >
-                0
+                {numClientes}
               </Typography>
             </Box>
           </Box>
         </Box>
 
-        
         <Box
           sx={{
             display: "flex",
